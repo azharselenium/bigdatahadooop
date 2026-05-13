@@ -1,5 +1,5 @@
 🚀 Complete Guide to Installing Hadoop 3.3.6
- 
+
 This guide covers:
 ✅ Installing Hadoop 3.3.6
 ✅ Configuring HDFS, YARN, and MapReduce
@@ -17,10 +17,14 @@ Before starting, ensure:
 Update system packages to avoid dependency issues:
 
 sudo apt update && sudo apt upgrade -y
+
+
 3️⃣ Install Java (OpenJDK 11)
 Hadoop requires Java. The recommended version is OpenJDK 11:
 
 sudo apt install openjdk-11-jdk -y
+
+
 Verify installation:
 
 java -version
@@ -30,6 +34,8 @@ openjdk version "11.0.20" 2024-XX-XX
 Alternative: If you need Java 8 for compatibility, install it using:
 
 sudo apt install openjdk-8-jdk -y
+
+
 4️⃣ Create a Hadoop User (Optional - Skip for now)
 Instead of using root or your personal user, create a dedicated hadoop user:
 
@@ -37,6 +43,8 @@ sudo adduser hadoop
 Add your user to the sudo group:
 
 sudo usermod -aG sudo hadoop
+
+
 Switch to the hadoop user:
 
 su - hadoop
@@ -47,9 +55,13 @@ Navigate to the Apache Hadoop downloads page:
 Download Hadoop 3.3.6:
 
 wget https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+
+
 Verify the file integrity (optional but recommended):
 
 sha512sum hadoop-3.3.6.tar.gz
+
+
 Compare the hash with the one on the official website.
 
 Extract Hadoop:
@@ -61,6 +73,8 @@ sudo mv hadoop-3.3.6 /usr/local/hadoop
 Set permissions:
 
 sudo chown -R $USER:$USER /usr/local/hadoop
+
+
 6️⃣ Configure Hadoop Environment Variables
 Edit the ~/.bashrc file:
 
@@ -87,6 +101,7 @@ echo $HADOOP_HOME
 Expected output: /usr/local/hadoop
 
 7️⃣ Configure Hadoop Core Files
+
 1️⃣ Configure hadoop-env.sh
 Edit Hadoop environment configuration:
 
@@ -98,6 +113,7 @@ Replace it with: (Replace 11 with 8 if you installed JDK 8)
 
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 Save & exit.
+
 
 2️⃣ Configure core-site.xml
 Edit:
@@ -140,6 +156,8 @@ mkdir -p /usr/local/hadoop/hdfs/datanode
 Set permissions:
 
 sudo chown -R $USER:$USER /usr/local/hadoop/hdfs
+
+
 4️⃣ Configure mapred-site.xml
 cp $HADOOP_HOME/etc/hadoop/mapred-site.xml.template $HADOOP_HOME/etc/hadoop/mapred-site.xml
 nano $HADOOP_HOME/etc/hadoop/mapred-site.xml
@@ -185,6 +203,8 @@ chmod 600 ~/.ssh/authorized_keys
 Test SSH:
 
 ssh localhost
+
+
 9️⃣ Format the Namenode & Start Hadoop
 Format the Namenode:
 
@@ -198,12 +218,17 @@ start-yarn.sh
 Verify:
 
 jps
+
+
 Expected output:
 
 NameNode
 DataNode
 ResourceManager
 NodeManager
+
+
+
 ✅ Verify Hadoop Installation
 📌 Open a browser and go to:
 ✔ HDFS Web UI → http://localhost:9870/
