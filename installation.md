@@ -1,4 +1,5 @@
 🚀 Complete Guide to Installing Hadoop 3.3.6 
+
 This guide covers:
 ✅ Installing Hadoop 3.3.6
 ✅ Configuring HDFS, YARN, and MapReduce
@@ -16,6 +17,7 @@ Before starting, ensure:
 Update system packages to avoid dependency issues:
 
 sudo apt update && sudo apt upgrade -y
+
 3️⃣ Install Java (OpenJDK 11)
 Hadoop requires Java. The recommended version is OpenJDK 11:
 
@@ -29,6 +31,7 @@ openjdk version "11.0.20" 2024-XX-XX
 Alternative: If you need Java 8 for compatibility, install it using:
 
 sudo apt install openjdk-8-jdk -y
+
 4️⃣ Create a Hadoop User (Optional - Skip for now)
 Instead of using root or your personal user, create a dedicated hadoop user:
 
@@ -39,6 +42,7 @@ sudo usermod -aG sudo hadoop
 Switch to the hadoop user:
 
 su - hadoop
+
 5️⃣ Download & Install Hadoop 3.3.6
 Navigate to the Apache Hadoop downloads page:
 🔗 https://hadoop.apache.org/releases.html
@@ -60,6 +64,7 @@ sudo mv hadoop-3.3.6 /usr/local/hadoop
 Set permissions:
 
 sudo chown -R $USER:$USER /usr/local/hadoop
+
 6️⃣ Configure Hadoop Environment Variables
 Edit the ~/.bashrc file:
 
