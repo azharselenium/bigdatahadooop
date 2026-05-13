@@ -1,7 +1,8 @@
 🚀 Complete Guide to Installing Hadoop 3.3.6 
 
 This guide covers:
-✅ Installing Hadoop 3.3.6
+
+✅ Installing Hadoop 3.3.6 /n
 ✅ Configuring HDFS, YARN, and MapReduce
 ✅ Setting up passwordless SSH
 ✅ Ensuring proper Java installation
