@@ -2,7 +2,7 @@
 
 This guide covers:
 
-✅ Installing Hadoop 3.3.6 /n
+✅ Installing Hadoop 3.3.6 
 ✅ Configuring HDFS, YARN, and MapReduce
 ✅ Setting up passwordless SSH
 ✅ Ensuring proper Java installation
@@ -10,6 +10,7 @@ This guide covers:
 
 1️⃣ Prerequisites
 Before starting, ensure:
+
 ✔ You have Ubuntu 24.04 running in VMware Workstation.
 ✔ At least 4GB RAM, 50GB disk space, and 4 CPU cores are allocated to the VM.
 ✔ Java 8 or later is installed.
@@ -17,7 +18,7 @@ Before starting, ensure:
 2️⃣ Update Ubuntu Packages
 Update system packages to avoid dependency issues:
 
-sudo apt update && sudo apt upgrade -y
+**sudo apt update && sudo apt upgrade -y**
 
 3️⃣ Install Java (OpenJDK 11)
 Hadoop requires Java. The recommended version is OpenJDK 11:
@@ -25,13 +26,13 @@ Hadoop requires Java. The recommended version is OpenJDK 11:
 sudo apt install openjdk-11-jdk -y
 Verify installation:
 
-java -version
+**java -version**
 Expected output (may vary slightly):
 
 openjdk version "11.0.20" 2024-XX-XX
 Alternative: If you need Java 8 for compatibility, install it using:
 
-sudo apt install openjdk-8-jdk -y
+**sudo apt install openjdk-8-jdk -y**
 
 4️⃣ Create a Hadoop User (Optional - Skip for now)
 Instead of using root or your personal user, create a dedicated hadoop user:
@@ -50,7 +51,8 @@ Navigate to the Apache Hadoop downloads page:
 
 Download Hadoop 3.3.6:
 
-wget https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+**wget https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz**
+
 Verify the file integrity (optional but recommended):
 
 sha512sum hadoop-3.3.6.tar.gz
@@ -58,18 +60,20 @@ Compare the hash with the one on the official website.
 
 Extract Hadoop:
 
-tar -xvzf hadoop-3.3.6.tar.gz
+**tar -xvzf hadoop-3.3.6.tar.gz**
+
 Move it to /usr/local/:
 
-sudo mv hadoop-3.3.6 /usr/local/hadoop
+**sudo mv hadoop-3.3.6 /usr/local/hadoop**
+
 Set permissions:
 
-sudo chown -R $USER:$USER /usr/local/hadoop
+**sudo chown -R $USER:$USER /usr/local/hadoop**
 
 6️⃣ Configure Hadoop Environment Variables
 Edit the ~/.bashrc file:
 
-nano ~/.bashrc
+**nano ~/.bashrc**
 Add these lines at the end:
 
 # Hadoop Environment Variables
