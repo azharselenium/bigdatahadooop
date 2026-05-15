@@ -1,0 +1,43 @@
+Navigation Commands
+Command	Purpose	Example
+pwd	Show current directory	pwd
+ls	List files/folders	ls -l
+cd	Change directory	cd Documents
+cd ..	Move up one folder	cd ..
+clear	Clear terminal screen	clear
+
+File & Folder Commands
+Command	Purpose	Example
+mkdir	Create folder	mkdir notes
+touch	Create empty file	touch file.txt
+cp	Copy files	cp a.txt b.txt
+mv	Move/rename files	mv old.txt new.txt
+rm	Delete file	rm file.txt
+rm -r	Delete folder recursively	rm -r notes
+cat	View file content	cat notes.txt
+nano	Edit file in terminal	nano notes.txt
+
+Search Commands
+Command	Purpose	Example
+find	Search files/folders	find . -name "*.txt"
+grep	Search text inside files	grep "hello" file.txt
+
+Permissions
+Command	Purpose	Example
+chmod	Change permissions	chmod +x script.sh
+sudo	Run as administrator	sudo apt update
+System Information
+
+Command	Purpose	Example
+whoami	Current user	whoami
+date	Show date/time	date
+
+
+Command	Purpose	Example
+sudo apt update	Update package list	sudo apt update
+sudo apt install	Install software	sudo apt install git
+
+Networking
+Command	Purpose	Example
+ping	Test internet connection	ping google.com
+ifconfig / ip a	Show IP address	ip a
