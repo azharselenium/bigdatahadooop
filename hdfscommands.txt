@@ -1,0 +1,112 @@
+1️⃣ Check Hadoop File System
+hadoop fs -ls /
+Purpose
+
+Lists all directories/files present in the HDFS root.
+
+Example Output
+drwxr-xr-x   - hadoop supergroup          0 /user
+
+2️⃣ Create Directory in HDFS
+hadoop fs -mkdir /input
+Purpose
+
+Creates a new directory named input inside HDFS.
+
+Real-life Example
+
+Creating folders to store:
+
+customer logs
+social media data
+banking transactions
+
+3️⃣ List Files in Directory
+hadoop fs -ls /input
+Purpose
+
+Displays contents of the input directory.
+
+4️⃣ Upload File to HDFS
+hadoop fs -put sample.txt /input
+Purpose
+
+Copies a local file into HDFS.
+
+Real-life Example
+
+Uploading:
+
+website logs
+CSV sales files
+sensor data
+
+into Hadoop cluster storage.
+
+5️⃣ Alternative Upload Command
+hadoop fs -copyFromLocal sample.txt /input
+Purpose
+
+Another method to upload local files into HDFS.
+
+Difference:
+
+put → flexible
+copyFromLocal → specifically from local filesystem
+
+6️⃣ View File Content
+hadoop fs -cat /input/sample.txt
+Purpose
+
+Displays file content directly in terminal.
+
+Similar to Linux:
+
+cat file.txt
+7️⃣ Download File from HDFS
+hadoop fs -get /input/sample.txt .
+Purpose
+
+Downloads file from HDFS to local machine.
+
+Real-life Example
+
+Downloading processed analytics reports from Hadoop cluster.
+
+8️⃣ Copy File Inside HDFS
+hadoop fs -cp /input/sample.txt /backup
+Purpose
+
+Creates a duplicate file in another HDFS location.
+
+9️⃣ Move/Rename File
+hadoop fs -mv /input/sample.txt /archive
+Purpose
+
+Moves or renames files inside HDFS.
+
+🔟 Delete File
+hadoop fs -rm /input/sample.txt
+Purpose
+
+Deletes a file from HDFS.
+
+1️⃣1️⃣ Delete Directory Recursively
+hadoop fs -rm -r /input
+Purpose
+
+Deletes directory and all files inside it.
+
+⚠️ Similar to Linux:
+
+rm -rf
+1️⃣2️⃣ Display File Size
+hadoop fs -du /input
+Purpose
+
+Shows disk usage of files/directories.
+
+Useful for:
+
+big data monitoring
+storage management
