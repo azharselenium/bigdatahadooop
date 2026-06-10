@@ -1,0 +1,122 @@
+1. Install Prerequisites
+Hadoop requires Java JDK 8 or 11. Open your Mac terminal and follow these commands: 
+●	Install Java and Homebrew package manager if you haven't already.
+Install Java 11 via Homebrew:
+bash
+brew install openjdk@11
+
+Link Java to your system paths:
+bash
+sudo ln -sfn /opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
+
+Verify your Java installation:
+bash
+java -version
+
+________________________________________
+2. Install Apache Hadoop
+Install Hadoop automatically using Homebrew:
+bash
+brew install hadoop
+
+Verify that Hadoop is successfully installed:
+bash
+hadoop version
+
+●	Find the installation path (usually /opt/homebrew/Cellar/hadoop/<version>/libexec on Apple Silicon Macs). 
+________________________________________
+3. Create the WordCount Java Program
+Create a fresh working directory on your local machine and navigate into it:
+bash
+mkdir ~/hadoop_wordcount && cd ~/hadoop_wordcount
+
+Create a source file named WordCount.java:
+bash
+nano WordCount.java
+
+Paste the official Apache Hadoop MapReduce Tutorial snippet into the file:
+java
+import java.io.IOException;
+import java.util.StringTokenizer;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class WordCount {
+  public static class TokenizerMapper extends Mapper<Object, Text, Text, IntWritable>{
+    private final static IntWritable one = new IntWritable(1);
+    private Text word = new Text();
+    public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+      StringTokenizer itr = new StringTokenizer(value.toString());
+      while (itr.hasMoreTokens()) {
+        word.set(itr.nextToken());
+        context.write(word, one);
+      }
+    }
+  }
+  public static class IntSumReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
+    private IntWritable result = new IntWritable();
+    public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+      int sum = 0;
+      for (IntWritable val : values) { sum += val.get(); }
+      result.set(sum);
+      context.write(key, result);
+    }
+  }
+  public static void main(String[] args) throws Exception {
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf, "word count");
+    job.setJarByClass(WordCount.class);
+    job.setMapperClass(TokenizerMapper.class);
+    job.setCombinerClass(IntSumReducer.class);
+    job.setReducerClass(IntSumReducer.class);
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(IntWritable.class);
+    FileInputFormat.addInputPath(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    System.exit(job.waitForCompletion(true) ? 0 : 1);
+  }
+}
+
+●	Save and exit the text editor (Press Ctrl + O, Enter, then Ctrl + X). 
+4. Setup Test Input Files
+Create an input directory locally:
+bash
+mkdir input
+
+Add some text files with words to count inside that directory:
+bash
+echo "hello hadoop apple macos hello apple" > input/file1.txt
+echo "hello macos hadoop mapreduce framework" > input/file2.txt
+
+________________________________________
+5. Compile and Run the Program 
+Compile WordCount.java using the Hadoop classpath helper:
+bash
+javac -classpath $(hadoop classpath) -d . WordCount.java
+
+Package the compiled .class bytecode files into a runnable .jar file:
+bash
+jar -cvf WordCount.jar *.class
+
+Run the standalone MapReduce job using Hadoop:
+bash
+hadoop jar WordCount.jar WordCount input output
+
+________________________________________
+6. Verify WordCount Results 
+Check the newly generated output directory contents:
+bash
+ls output
+
+Print the calculated word count outcomes directly onto your screen:
+bash
+cat output/part-r-00000
+
+
