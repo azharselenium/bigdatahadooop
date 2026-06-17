@@ -1,188 +1,305 @@
-Step 1: Verify Hadoop is Running
-Check:
+Step 1: Verify Hadoop First
 
-jps
-Expected:
+Run:
 
-NameNode
-DataNode
-SecondaryNameNode
-ResourceManager
-NodeManager
-Verify HDFS:
 
-hdfs dfs -ls /
-If this works, Hadoop is ready for Hive.
 
-Step 2: Download Hive
-Go to:
+java -version
 
-Apache Hive Downloads
+hadoop version
 
-Or download via terminal:
 
-wget https://archive.apache.org/dist/hive/hive-4.0.1/apache-hive-4.0.1-bin.tar.gz
 
-Extract:
+Also verify:
 
-tar -xzvf apache-hive-4.0.1-bin.tar.gz
-Move:
 
-sudo mv apache-hive-4.0.1-bin /opt/hive
 
-Step 3: Configure Environment Variables
-Edit:
+echo $JAVA_HOME
 
-nano ~/.bashrc
-Add:
 
-export HIVE_HOME=/opt/hive
-export PATH=$PATH:$HIVE_HOME/bin
 
-export HADOOP_HOME=/usr/local/hadoop
-export HADOOP_MAPRED_HOME=$HADOOP_HOME
+If empty:
+
+
+
+export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+
+
+
+Add it to:
+
+
+
+nano ~/.zshrc
+
+
+
+
+
+export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+
+export PATH=$JAVA_HOME/bin:$PATH
+
+
+
 Reload:
 
-source ~/.bashrc
+
+
+source ~/.zshrc
+
+
+
+
+
+Step 2: Install Hive
+
+Using Homebrew:
+
+
+
+brew install hive
+
+
+
 Verify:
+
+
+
+hive --version
+
+
+
+Step 3: Find Hive Installation Directory
+
+
+
+brew --prefix hive
+
+
+
+Example:
+
+
+
+/opt/homebrew/opt/hive
+
+
+
+Set:
+
+
+
+export HIVE_HOME=/opt/homebrew/opt/hive
+
+export PATH=$PATH:$HIVE_HOME/bin
+
+
+
+Add to:
+
+
+
+~/.zshrc
+
+
+
+Reload:
+
+
+
+source ~/.zshrc
+
+
+
+Verify:
+
+
 
 echo $HIVE_HOME
 
-Step 4: Create Hive Configuration
-Go to Hive config folder:
 
-cd $HIVE_HOME/conf
+
+Step 4: Create Hive Warehouse
+
+Create warehouse directory:
+
+
+
+mkdir -p ~/hive/warehouse
+
+
+
+Give permissions:
+
+
+
+chmod -R 777 ~/hive
+
+
+
+
+
+Step 5: Configure Hive
+
+Create Hive config directory if needed:
+
+
+
+mkdir -p $HIVE_HOME/conf
+
+
+
 Copy template:
 
-cp hive-default.xml.template hive-site.xml
 
-Step 5: Configure Hive Metastore
-For learning/lab purposes use Derby.
 
-Create:
+cp $HIVE_HOME/libexec/conf/hive-default.xml.template \
 
-nano hive-site.xml
+   $HIVE_HOME/conf/hive-site.xml
+
+
+
+Open:
+
+
+
+nano $HIVE_HOME/conf/hive-site.xml
+
+
+
 Add:
+
+
 
 <configuration>
 
-<property>
-  <name>javax.jdo.option.ConnectionURL</name>
-  <value>jdbc:derby:;databaseName=metastore_db;create=true</value>
-</property>
+
 
 <property>
-  <name>hive.metastore.warehouse.dir</name>
-  <value>/user/hive/warehouse</value>
+
+  <name>javax.jdo.option.ConnectionURL</name>
+
+  <value>jdbc:derby:;databaseName=metastore_db;create=true</value>
+
 </property>
+
+
+
+<property>
+
+  <name>hive.metastore.warehouse.dir</name>
+
+  <value>/Users/YOUR_USERNAME/hive/warehouse</value>
+
+</property>
+
+
 
 </configuration>
 
-Step 6: Create Warehouse Directory in HDFS
-Create:
 
-hdfs dfs -mkdir -p /user/hive/warehouse
-Grant permissions:
 
-hdfs dfs -chmod g+w /user/hive/warehouse
-Verify:
+Replace:
 
-hdfs dfs -ls /user/hive
-Expected:
 
-warehouse
 
-Step 7: Download PostgreSQL Driver (Hive 4.x Requirement)
-Many Hive versions need JDBC dependencies.
+YOUR_USERNAME
 
-Create lib directory if needed:
 
-mkdir -p $HIVE_HOME/lib
-If using Derby bundled with Hive you may skip this for training labs.
 
-Step 8: Initialize Hive Schema
+with your Mac username.
+
+
+
+Step 6: Initialize Hive Metastore
+
+Hive 4 requires schema initialization.
+
 Run:
 
+
+
 schematool -dbType derby -initSchema
+
+
+
 Expected:
+
+
 
 Initialization script completed
-If successful, Hive metastore is created.
 
-Step 9: Start Hive
-Launch:
+schemaTool completed
+
+
+
+
+
+Step 7: Start Hive
+
+Run:
+
+
 
 hive
-Expected:
+
+
+
+You should get:
+
+
 
 hive>
 
-Step 10: Verify Hive
-Show databases:
 
-SHOW DATABASES;
+
+Test:
+
+
+
+show databases;
+
+
+
 Output:
+
+
 
 default
-Lab Exercise 1: Create Database
-CREATE DATABASE company;
-Verify:
 
-SHOW DATABASES;
+
+
+Step 7: Start HiveServer2
+
+Because Hive 4 caches configuration, restart it:
+
+
+
+hiveserver2
+
+
+
+Leave this terminal running.
+
+Open a new terminal:
+
+
+
+beeline -u jdbc:hive2://
+
+
+
+Test:
+
+
+
+show databases;
+
+
+
 Output:
+
+
 
 default
-company
-Lab Exercise 2: Use Database
-USE company;
-Lab Exercise 3: Create Table
-CREATE TABLE employee(
-id INT,
-name STRING,
-salary FLOAT
-);
-Check:
-
-SHOW TABLES;
-Lab Exercise 4: Insert Data
-INSERT INTO employee VALUES
-(1,'Radhika',50000),
-(2,'Azhar',65000),
-(3,'John',75000);
-Lab Exercise 5: Query Data
-SELECT * FROM employee;
-Output:
-
-1 Radhika 50000
-2 Azhar   65000
-3 John    75000
-Lab Exercise 6: Aggregation
-SELECT AVG(salary)
-FROM employee;
-Output:
-
-63333.33
-Lab Exercise 7: Create CSV-Based Table
-Create CSV:
-
-nano employee.csv
-1,Radhika,50000
-2,Azhar,65000
-3,John,75000
-Create Hive table:
-
-CREATE TABLE emp_csv(
-id INT,
-name STRING,
-salary INT
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ',';
-Load CSV:
-
-LOAD DATA LOCAL INPATH
-'/home/hadoop/employee.csv'
-INTO TABLE emp_csv;
-Verify:
-
-SELECT * FROM emp_csv;
