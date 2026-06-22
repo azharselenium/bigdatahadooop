@@ -1,0 +1,273 @@
+﻿Installing Apache Pig on macOS is quick using Homebrew, which automatically resolves dependencies like Java.
+1. Prerequisites
+Ensure you have Homebrew installed on your Mac. You will also need a Java Development Kit (JDK) installed and configured since Pig is a Java-based application.
+2. Install Apache Pig
+Open your Terminal and run the following Homebrew command to install Pig:
+bash
+brew install pig
+
+
+3. Set Environment Variables
+Pig needs to know where Java is installed on your system. You can set the JAVA_HOME variable by updating your shell configuration file (e.g., ~/.zshrc if you are using macOS Catalina or later).
+Open your shell profile in a text editor:
+bash
+nano ~/.zshrc
+
+
+Add the following lines to the bottom of the file (adjust openjdk to your installed Java version if different):
+bash
+export JAVA_HOME="/opt/homebrew/opt/openjdk"
+export PATH="$JAVA_HOME/bin:$PATH"
+
+
+1. Save and close the file (in nano, press Ctrl+O, Enter, then Ctrl+X).
+Apply the changes:
+bash
+source ~/.zshrc
+
+
+4. Verify Installation
+To confirm that Apache Pig is successfully installed, check the version:
+bash
+pig -version
+
+
+
+
+Locating a jar file
+
+
+1. Locate Your Pig JAR File
+Homebrew installs packages into specific directories depending on your Mac's processor type. Run the following command to find exactly where your Pig core JAR is located:
+bash
+ls $(brew --prefix pig)/libexec/*.jar
+
+
+2. Update Your Environment Variables [1]
+You need to add PIG_HOME and PIG_CLASSPATH variables to your environment.
+Open your terminal profile:
+bash
+nano ~/.zshrc
+Paste the following configuration at the bottom of the file:
+bash
+# Apache Pig Configurations
+export PIG_HOME="$(brew --prefix pig)/libexec"
+export PIG_CLASSPATH="$PIG_HOME/pig-0.17.0-h2.jar"
+export PATH="$PIG_HOME/bin:$PATH"
+1. Use code with caution.
+(Note: Double check the JAR filename in the second line matches the exact name found in Step 1).
+2. Save and close the file (Ctrl+O, Enter, then Ctrl+X).
+Reload your terminal settings:
+bash
+source ~/.zshrc
+3. Verify the Fix
+Now test the Pig command again:
+bash
+pig -version
+
+
+Final .zshrc file 
+bash
+# 1. Initialize Homebrew FIRST (Fixes the $(brew) resolution issue)
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
+# 2. Java Settings
+export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+export PATH=$JAVA_HOME/bin:$PATH
+
+
+# 3. Apache Hive Settings
+export HIVE_HOME=/opt/homebrew/opt/hive
+export PATH=$PATH:$HIVE_HOME/bin
+
+
+# 4. Apache Pig Settings
+export PIG_HOME="$HOMEBREW_PREFIX/opt/pig/libexec"
+export PIG_CLASSPATH="$PIG_HOME/pig-0.18.0-core-h3.jar"
+export PATH="$PIG_HOME/bin:$PATH"
+
+
+
+
+Create a Symlink 
+We can simply trick the homebrew runner by creating a shortcut link with the exact name it is demanding. Run this command in your Terminal:
+bash
+ln -s /opt/homebrew/opt/pig/libexec/pig-0.18.0-core-h3.jar /opt/homebrew/opt/pig/libexec/pig-core-h.jar
+
+
+Now try typing pig -version. It will instantly recognize the file and initialize the Grunt shell.
+________________
+
+
+Fix Option 2: Clean and Reconstruct your ~/.zshrc
+If Option 1 still complains, ensure there are no leftover duplicate paths breaking the sequence. Open nano ~/.zshrc and replace your entire Pig/Java section with this specific format, which intentionally clears Hadoop's clashing variables during runtime:
+bash
+# 1. Homebrew Core
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
+# 2. Java Runtime
+export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+export PATH=$JAVA_HOME/bin:$PATH
+
+
+# 3. Hive Configuration 
+export HIVE_HOME=/opt/homebrew/opt/hive
+export PATH=$PATH:$HIVE_HOME/bin
+
+
+# 4. Pig Configuration (With False-Positive Protection)
+export PIG_HOME="/opt/homebrew/opt/pig/libexec"
+export PIG_CLASSPATH="$PIG_HOME/pig-0.18.0-core-h3.jar"
+export PATH="$PIG_HOME/bin:$PATH"
+
+
+# Prevent the brew launch script from matching legacy Hadoop variables
+export HADOOP_HOME=""
+
+
+
+
+
+
+Remember to apply the update in your active window:
+bash
+source ~/.zshrc
+
+
+
+
+java.lang.UnsupportedClassVersionError
+
+
+. Install Java 17 via Homebrew
+Open your terminal and install the OpenJDK 17 package:
+bash
+brew install openjdk@17
+
+
+2. Update Your Environment Settings
+You need to change your ~/.zshrc file to swap Java 11 for Java 17.
+Open your terminal profile:
+bash
+nano ~/.zshrc
+Locate your Java configuration line and update the version flag from -v 11 to -v 17. Your block should look exactly like this:
+Bash
+
+
+# 1. Homebrew Core
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
+# 2. Java Runtime (UPDATED TO 17)
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+export PATH=$JAVA_HOME/bin:$PATH
+
+
+# 3. Hive Configuration 
+export HIVE_HOME=/opt/homebrew/opt/hive
+export PATH=$PATH:$HIVE_HOME/bin
+
+
+# 4. Pig Configuration
+export PIG_HOME="/opt/homebrew/opt/pig/libexec"
+export PIG_CLASSPATH="$PIG_HOME/pig-0.18.0-core-h3.jar"
+export PATH="$PIG_HOME/bin:$PATH"
+export HADOOP_HOME=""
+
+
+   1. Save the file (Ctrl+O, Enter, then Ctrl+X).
+3. Reload and Verify
+Force your active terminal tab to read the changes:
+bash
+source ~/.zshrc
+
+
+Verify your active runtime has successfully updated to version 17: [1]
+bash
+java -version
+
+
+
+
+Once you confirm the command output references Java 17, execute the version check again:
+bash
+pig -version
+
+
+ZSH: command not found GRUNT
+You can run Pig commands interactively inside a shell environment called Grunt. To enter it, type: [1]
+bash
+pig -x local
+
+
+Your prompt will change to grunt>. This confirms you are ready to write code. To exit the shell at any time, type quit;. 
+________________
+
+
+
+
+First Program:
+1. Launch the Interactive Shell (Grunt) 
+You can run Pig commands interactively inside a shell environment called Grunt. To enter it, type: 
+bash
+pig -x local
+
+
+
+
+Your prompt will change to grunt>. This confirms you are ready to write code. To exit the shell at any time, type quit;. 
+________________
+
+
+2. Run a Quick "Hello World" (Word Count) 
+Let’s test Pig by creating a small text file and counting how many times each word appears.
+Step A: Create a Sample File
+Open a new Terminal window (keep Grunt open in your other one) and create a simple text file:
+bash
+echo "apple banana apple cherry banana apple" > ~/Documents/sample.txt
+
+
+
+
+Step B: Run the Pig Latin Script [1]
+Switch back to your Grunt shell (grunt>) and run these commands line by line: [1]
+pig
+-- 1. Load the data from your local documents folder
+lines = LOAD '~/Documents/sample.txt' AS (line:chararray);
+
+
+-- 2. Tokenize the sentences into individual words
+words = FOREACH lines GENERATE FLATTEN(TOKENIZE(line)) AS word;
+
+
+-- 3. Group identical words together
+grouped = GROUP words BY word;
+
+
+-- 4. Count the occurrences of each word
+word_counts = FOREACH grouped GENERATE group AS word, COUNT(words) AS count;
+
+
+-- 5. Print the results to your screen
+DUMP word_counts;
+
+
+-- 6. Save directly to a folder instead of printing to screen 
+STORE word_counts INTO '/Users/azharjamal/Desktop/pig_output';
+
+
+How to View Your Results
+Once the script says Success!, open your standard Mac Terminal (or use Finder) and look inside the newly created folder to see your results:
+bash
+cat /Users/azharjamal/Desktop/pig_output/part-r-00000
+
+
+
+
+Once the MapReduce logs finish printing, you should see an output like this:
+text
+(apple,3)
+(banana,2)
+(cherry,1)
