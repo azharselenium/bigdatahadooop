@@ -1,0 +1,103 @@
+﻿Installing via Homebrew (Recommended)
+Homebrew automatically manages the environment paths, making it the easiest installation method. 
+1. Install HBase
+Open your Terminal and execute the following command: 
+bash
+brew install hbase
+
+
+2. Locate the Configuration Files
+Homebrew installs packages into specific directories depending on your Mac's processor:
+* Apple Silicon (M1/M2/M3/M4): /opt/homebrew/Cellar/hbase/<version>/libexec/conf/
+* Intel Processors: /usr/local/Cellar/hbase/<version>/libexec/conf/ [1]
+3. Update Environment Paths (Optional)
+Add HBase to your terminal profile (~/.zshrc or ~/.bash_profile) so you can access its commands from anywhere:
+bash
+export HBASE_HOME=/opt/homebrew/opt/hbase  # Use /usr/local/opt/hbase for Intel
+export PATH=$PATH:$HBASE_HOME/bin
+
+
+Apply the changes:
+bash
+source ~/.zshrc
+
+
+
+
+
+
+
+
+4. Open directly in Terminal (Fastest)
+Run this command to open the configuration file immediately inside your terminal using the built-in Nano text editor:
+bash
+nano /opt/homebrew/Cellar/hbase/2.6.6/libexec/conf/hbase-site.xml
+xml
+<configuration>
+  <property>
+    <name>hbase.rootdir</name>
+    <value>file:///opt/homebrew/var/hbase</value>
+  </property>
+  <property>
+    <name>hbase.zookeeper.property.dataDir</name>
+    <value>/opt/homebrew/var/zookeeper</value>
+  </property>
+  <property>
+    <name>hbase.cluster.distributed</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>hbase.tmp.dir</name>
+    <value>/opt/homebrew/var/hbase/tmp</value>
+  </property>
+  <property>
+    <name>hbase.unsafe.stream.capability.enforce</name>
+    <value>false</value>
+  </property>
+</configuration>
+
+
+How to use the Nano editor:
+1. Use your keyboard's arrow keys to move around.
+2. Select everything between the <configuration> and </configuration> tags, delete it, and paste your chosen code block from the previous step.
+3. To save: Press Ctrl + O, then press Enter.
+4. To exit: Press Ctrl + X. 
+________________
+
+
+Step 5: Start HBase
+start-hbase.sh
+Wait 15 seconds.
+Then check:
+jps
+Expected:
+HMaster
+HRegionServer
+NameNode
+DataNode
+ResourceManager
+NodeManager
+Jps
+________________
+
+
+Step 6: Open HBase Shell
+hbase shell
+Run:
+status
+Expected:
+1 active master
+1 region server
+________________
+
+
+Step 7: Create a Test Table
+For your Big Data lab:
+create 'students','info'
+Insert data:
+put 'students','1','info:name','Azhar'
+put 'students','1','info:course','Big Data'
+Read data:
+get 'students','1'
+Scan table:
+scan 'students'
