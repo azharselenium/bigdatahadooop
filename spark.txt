@@ -1,0 +1,247 @@
+﻿Spark installation and sample program
+
+
+Step 1: Download Spark
+Go to:
+Apache Spark Downloads
+Choose:
+Spark Release:
+3.5.x
+
+
+Package:
+Pre-built for Apache Hadoop 3.3 and later
+Or download directly (replace 3.5.x with the latest 3.5 release shown on the download page).
+________________
+
+
+Step 2: Extract
+cd ~/Downloads
+
+
+tar -xzf spark-3.5.*-bin-hadoop3.tgz
+
+
+sudo mv spark-3.5.*-bin-hadoop3 /opt/homebrew/opt/spark
+Verify:
+ls /opt/homebrew/opt/spark
+You should see:
+bin
+conf
+examples
+jars
+python
+sbin
+________________
+
+
+Step 3: Configure Environment Variables
+Edit:
+nano ~/.zshrc
+Add:
+export SPARK_HOME=/opt/homebrew/opt/spark
+export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+If you are using Java 11:
+export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+Reload:
+source ~/.zshrc
+Verify:
+echo $SPARK_HOME
+Expected:
+/opt/homebrew/opt/spark
+________________
+
+
+Step 4: Verify Installation
+spark-shell
+Expected:
+Welcome to
+     ____              __
+    / __/__  ___ _____/ /__
+   _\ \/ _ \/ _ `/ __/  '_/
+  /___/ .__/\_,_/_/ /_/\_\
+     /_/
+
+
+Using Scala 2.12
+Spark context available as sc
+Spark session available as spark
+Type:
+sc.version
+Example:
+3.5.x
+Exit:
+:quit
+________________
+
+
+Step 5: Verify PySpark
+pyspark
+Expected:
+>>> spark
+Run:
+spark.range(10).show()
+Exit:
+exit()
+________________
+
+
+Step 6: Verify Spark Submit
+spark-submit --version
+You should see the Spark version and Scala version.
+________________
+
+
+Step 7: Run Your First Example
+cd $SPARK_HOME
+
+
+bin/run-example SparkPi 10
+Expected output:
+Pi is roughly 3.14159
+This is a great first demonstration for students.
+________________
+
+
+Step 8: Start the Scala Shell (for Unit 13)
+Your syllabus begins with:
+* Introduction to Spark
+* Scala Shell
+* Core Spark Concepts
+* RDD Basics
+Start the shell:
+spark-shell
+Then run:
+val nums = List(1,2,3,4,5)
+
+
+val rdd = sc.parallelize(nums)
+
+
+rdd.collect()
+
+
+rdd.count()
+
+
+rdd.first()
+
+
+rdd.take(3)
+These commands introduce students to RDD creation and basic actions, matching your Unit 13 learning outcomes.
+
+
+Program: Find Even Numbers and Their Squares Using RDD
+Step 1: Start Spark Shell
+spark-shell
+________________
+
+
+Step 2: Create an RDD
+val numbers = sc.parallelize(List(1,2,3,4,5,6,7,8,9,10))
+Output
+numbers: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize
+________________
+
+
+Step 3: Display the RDD
+numbers.collect()
+Output
+Array(1,2,3,4,5,6,7,8,9,10)
+________________
+
+
+Step 4: Filter Even Numbers
+val evenNumbers = numbers.filter(x => x % 2 == 0)
+Display:
+evenNumbers.collect()
+Output
+Array(2,4,6,8,10)
+________________
+
+
+Step 5: Square Each Number
+val squares = evenNumbers.map(x => x * x)
+Display:
+squares.collect()
+Output
+Array(4,16,36,64,100)
+________________
+
+
+Step 6: Count the Numbers
+squares.count()
+Output
+5
+________________
+
+
+Step 7: Find the Maximum Value
+squares.max()
+Output
+100
+________________
+
+
+Step 8: Calculate the Sum
+squares.reduce((x,y) => x + y)
+Output
+220
+________________
+
+
+Complete Program
+// Create RDD
+val numbers = sc.parallelize(List(1,2,3,4,5,6,7,8,9,10))
+
+
+// Display Data
+numbers.collect()
+
+
+// Filter Even Numbers
+val evenNumbers = numbers.filter(x => x % 2 == 0)
+evenNumbers.collect()
+
+
+// Square Each Number
+val squares = evenNumbers.map(x => x * x)
+squares.collect()
+
+
+// Count Elements
+squares.count()
+
+
+// Maximum Value
+squares.max()
+
+
+// Sum of Squares
+squares.reduce((x,y) => x + y)
+________________
+
+
+Expected Output
+Original Numbers:
+1 2 3 4 5 6 7 8 9 10
+
+
+Even Numbers:
+2 4 6 8 10
+
+
+Squares:
+4 16 36 64 100
+
+
+Count:
+5
+
+
+Maximum:
+100
+
+
+Sum:
+220
