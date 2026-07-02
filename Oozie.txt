@@ -1,0 +1,75 @@
+﻿WorkflowDemo.java
+
+
+package com.demo;
+public class WorkflowDemo {
+    // Start Node
+    static void start() {
+        System.out.println("Start Workflow");
+    }
+    // Action Node 1
+    static void readStudentData() {
+        System.out.println("Reading Student Data...");
+    }
+    // Action Node 2
+    static void calculateMarks() {
+        System.out.println("Calculating Total Marks...");
+    }
+    // Action Node 3
+    static void generateReport() {
+        System.out.println("Generating Report Card...");
+    }
+    // End Node
+    static void end() {
+        System.out.println("Workflow Completed Successfully.");
+    }
+    public static void main(String[] args) {
+        start();
+        readStudentData();
+        calculateMarks();
+        generateReport();
+        end();
+    }
+}
+
+
+
+
+WorkflowDecision.java
+package com.demo;
+public class WorkflowDecision {
+    public static void main(String[] args) {
+        int marks = 65;
+        System.out.println("Start Workflow");
+        System.out.println("Calculating Result...");
+        if (marks >= 40) {
+            System.out.println("Student Passed");
+        } else {
+            System.out.println("Student Failed");
+        }
+        System.out.println("End Workflow");
+    }
+}
+WorkflowForkJoin.java
+package com.demo;
+public class WorkflowForkJoin {
+    static void salesReport() {
+        System.out.println("Generating Sales Report");
+    }
+    static void employeeReport() {
+        System.out.println("Generating Employee Report");
+    }
+    static void inventoryReport() {
+        System.out.println("Generating Inventory Report");
+    }
+    public static void main(String[] args) {
+        System.out.println("Start Workflow");
+        // Simulating a Fork
+        salesReport();
+        employeeReport();
+        inventoryReport();
+        // Simulating a Join
+        System.out.println("All Reports Generated");
+        System.out.println("End Workflow");
+    }
+}
