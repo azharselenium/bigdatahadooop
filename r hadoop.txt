@@ -1,0 +1,73 @@
+﻿R-Hadoop installation and Program:
+
+
+Recommended Lab Setup (macOS)
+Step 1: Verify Hadoop
+Since you've already installed Hadoop, verify it:
+hdfs dfs -ls /
+If it lists the HDFS root, Hadoop is working.
+Step 2: Install R
+If you use Homebrew:
+brew install r
+Verify:
+R --version
+Example:
+R version 4.x.x
+Step 3: Start R
+R
+You should see:
+>
+First R Program
+print("Hello Students")
+Output
+[1] "Hello Students"
+Variables
+name <- "Azhar"
+age <- 30
+print(name)
+print(age)
+Vector
+marks <- c(70,80,90,75,60)
+marks
+Output
+70 80 90 75 60
+Mean
+mean(marks)
+Output
+75
+Step 4: Create a Text File
+Launch another terminal 
+Open TextEdit.
+Change to Plain Text:
+Format → Make Plain Text
+Save the file as:
+students.txt
+Contents:
+John
+Alice
+John
+David
+John
+Alice
+Step 5: Save the File
+Suppose you save it on the Desktop.
+Location:
+/Users/**/**/students.txt
+Step 6: Open R
+R
+Step 7: Read the File
+students <- readLines("/Users/**/**/students.txt")
+students
+Output:
+[1] "John"
+[2] "Alice"
+[3] "John"
+[4] "David"
+[5] "John"
+[6] "Alice"
+Count the Names
+table(students)
+Output:
+students
+Alice David John
+    2     1    3
